@@ -1,0 +1,85 @@
+@font-face {
+    font-family: pizarra;
+    src: url('../font_family/chalkdust.ttf');
+}
+html {
+    margin: 0;
+    height: 100%;
+    padding: 0;
+}
+body {
+    display: grid;
+    justify-content: center;
+    /* background-color: black; */
+    background-image: url('../img/background.jpg');
+    /* color: black; */
+}
+.menu {
+    top: 30%;
+    left: 40%;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.609);
+    border-radius: 15px;
+    padding: 10px;
+    color: white;
+}
+.contenidoForm {
+    text-align: center;
+    padding: 50px 20px 20px 20px;
+}
+button {
+    margin-top: 30px;
+    width: 100%;
+}
+.game {
+    text-align: center;
+    font-family: pizarra;
+    color: white;
+    display: none;
+}
+.palabras {
+    padding: 50px;
+}
+.espacio {
+    padding-right: 20px;
+}
+#mensajeAlAcabar {
+    width: 1611px;
+}
+#imgAcabar {
+    display: none;
+    width: 200px;
+    height: 200px;
+}
+.spanOptions {
+    font-size: 40px;
+    cursor: pointer;
+    border: 1px solid white;
+    transition: 0.5s;
+    padding: 10px;
+    margin: 5px;
+}
+.spanOptions:hover {
+    /* padding: 20px; */
+    background-color: rgba(255, 255, 255, 0.326);
+    /* background-color: rgb(255, 255, 255); */
+
+}
+#tiempo{
+    position: absolute;
+    top: 10px;
+    left: 100px;
+}
+#errores{
+    position: absolute;
+    top: 80px;
+    left: 100px;
+
+}
+.teclaEspacio{
+    width: 500px !important
+}
+.columnaCustom{
+    flex: 0 0 auto;
+    width: 8.666667%;
+}

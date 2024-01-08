@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HangMan</title>
+    <link rel="icon" type="favicon" href="img/favicon.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/css.css">
+</head>
+<body id="body">
+    <!-- 1. Un camp de text per posar el  nom d'usuari i un botó per començar el joc.
+         2. Visualitzar en tot moment la màscara de la paraula amb la que estem jugant, en la que s'aniran col·locant les lletres a mesura que les encerti l'usuari.
+         3. Visualitzar en tot moment el dibuix del penjat (s'anirà "construint" amb cada error de l'usuari). 
+         4. Quan el joc acaba, ja sigui tant si s'ha encertat la paraula com si no, es mostrarà una imatge i una mica d'informació educativa relacionada amb la paraula (recordeu quin és el públic objectiu).
+            A més a més, s'ha d'oferir l'opció de tornar a jugar.
+         5. L'usuari ha de poder seleccionar la lletra fent click en l'opció desitjada. És a dir, s'ha de mostrar a l'usuari totes les lletres disponibles. Si una lletra ja ha estat utilitzada, 
+            no s'ha de poder tornar a seleccionar.
+         6. Per donar una pista a l'usuari, les paraules estaran englobades en tres categories (les que vulgueu, adequades a la temàtica). Quan se seleccioni aleatòriament la paraula a encertar, 
+            mostrarem el nom de la categoria. Aquest nom sempre estarà visible. -->
+    <!-- 1. -->
+    <div class="menu" id="divMenu">
+        <h1 class="contenidoForm">HangMan</h1>
+        <form>
+            <div class="row g-3 align-items-center contenidoForm">
+            <div class="col-auto">
+                <label for="name" class="col-form-label">Nombre: </label>
+              </div>
+              <div class="col-auto">
+                <input type="text" id="name" class="form-control" placeholder="John Doe...">
+              </div>
+            </div>
+            <button type="button" class="btn btn-primary" onclick="displayGame()">Jugar</button>
+        </form>
+    </div>
+    <div class="game" id="divGame">
+        <h1 id="titulo">Palabra a adivinar</h1>
+        <h2 id="tiempo">Tiempo: </h2>
+        <h4 id="categoria"></h4>
+        <h3 id="palabraAdivinar"></h3>
+        <h5 id="errores">Errores: </h5>
+        <div class="palabras row" id="palabras"></div>
+        <div class="ahoradoContainer">
+            <img src="" alt="" id="hangman" width="100px">
+        </div>
+        <p id="mensajeAlAcabar"></p>
+        <img src="" id="imgAcabar">
+        <!-- <h4 id="hangman"></h4> -->
+    </div>
+    <script src="js/displayGame.js"></script>
+    <script src="js/hangman_mecanic.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+    <script>
+        // if (!play) {
+        //     document.addEventListener("keyup", function(event) {
+        //         if (event.code === 'Enter') {
+        //             play = true
+        //             displayGame()
+        //         }
+        //     });  
+        //  }   
+    </script>
+</body>
+</html>
