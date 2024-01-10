@@ -25,6 +25,8 @@ if (categoriaAleatoria === 0) {
 } else {
     categoria.textContent = 'Cat: Musica'
     array_Palabras = definirPalabrasMusica()
+    array_Explicacion = definirExplicacionMusica()
+    array_Imgs = imgMusica()  
 }
 let parabraAleatoria = Math.floor(Math.random() * array_Palabras.length);
 let letrasSeleccionadas = []
@@ -214,8 +216,8 @@ function imgTecnologia() {{
 }}
 function definirPalabrasMusica() {
     return [
-         { palabra: "melodia" },
-         { palabra: "armonia" },
+         { palabra: 'melodia' },
+         { palabra: 'armonia' },
          { palabra: 'ritmo' },
          { palabra: 'partitura' },
          { palabra: 'acorde' },
@@ -226,6 +228,34 @@ function definirPalabrasMusica() {
          { palabra: 'sinfonia' },
      ]
 }
+function definirExplicacionMusica() {
+    return [
+         { exp: 'Una melodía es una sucesión de sonidos que es percibida como una sola entidad. ' },
+         { exp: 'La armonía o harmonía es el estudio de la técnica para enlazar acordes, también engloba conceptos como ritmo armónico.' },
+         { exp: 'El ritmo, como un recurso fundamental en la visualidad, puede definirse generalmente como un «movimiento marcado por la sucesión regular de elementos débiles y fuertes, o bien de condiciones opuestas o diferentes».' },
+         { exp: 'Una partitura es un documento manuscrito o impreso que representa e indica cómo debe interpretarse una composición musical, mediante un lenguaje propio formado por signos musicales y el llamado sistema de notación.' },
+         { exp: 'En música y teoría musical, un acorde consiste en un conjunto de dos o más notas diferentes y que constituyen una unidad armónica.' },
+         { exp: 'Un instrumento musical es un sistema compuesto por la combinación de uno o más sistemas resonantes y medios para su vibración, construido con el fin de producir sonido en uno o más tonos que puedan ser combinados por un intérprete para producir música.' },
+         { exp: 'Las notas musicales se utilizan en la notación musical para representar la altura y la duración relativa de un sonido, se suele emplear la acepción «figura musical».' },
+         { exp: 'El término sonata es el nombre dado a distintas formas musicales, empleadas desde el período barroco hasta las experiencias más futurísticas de la música contemporánea.' },
+         { exp: 'Un concierto es una expresión cultural musical en la «que se ejecutan composiciones sueltas».' },
+         { exp: 'Una sinfonía es un tipo de composición musical extendida en la música clásica occidental y compuesta la mayoría de las veces para orquesta. Generalmente, está dividida en cuatro movimientos, cada uno con un momento y estructura diferente.' },
+     ]
+}
+function imgMusica() {{ 
+    return [
+        {img: "../img/melodia.png"}, 
+        {img: "../img/armonia.png"},
+        {img: "../img/ritmo.png"},
+        {img: "../img/partitura.png"},
+        {img: "../img/acorde.png"},
+        {img: "../img/instrumento.png"},
+        {img: "../img/nota.png"},
+        {img: "../img/sonata.png"},
+        {img: "../img/concierto.jpg"},
+        {img: "../img/sinfonia.jpg"},
+    ]
+}}
 function mostrarMascara() {
     for (let index = 0; index < array_Palabras[parabraAleatoria].palabra.length; index++) {
         const mascara = document.createElement('span')
@@ -267,10 +297,12 @@ function mostrarLetras() {
 //     // }  
 // }
 function contador() {
-  setTimeout(() => {
-    cronometro.textContent = 'Tiempo: '+ tiempo
-    tiempo++
-}, 1000);    
+    if (fallos < 5 && !juegoAcabado && !ganado) {
+        setTimeout(() => {
+            cronometro.textContent = 'Tiempo: '+ tiempo
+            tiempo++
+        }, 1000);
+    }    
 }
 function empezarCronometro() {
     // if (play) {
