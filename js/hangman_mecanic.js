@@ -1,3 +1,7 @@
+let jugando = false
+let localStorageJugando = 'Veces Jugadas'
+let localStoragePalabra = 'Palabra'
+let localStorageCategoria = 'Categoria'
 let titulo = document.getElementById('titulo')
 let palabraAdivinar = document.getElementById('palabraAdivinar')
 let palabras = document.getElementById('palabras')
@@ -8,27 +12,11 @@ let mensajeAcabar = document.getElementById('mensajeAlAcabar')
 let imagenAcabar = document.getElementById('imgAcabar')
 let categoria = document.getElementById('categoria')
 let arrayLetras = definirArrayLetras()
+let invalidarLetra
+let evento
 let array_Palabras
 let array_Explicacion
 let array_Imgs
-let categoriaAleatoria = Math.floor(Math.random() * 3)
-if (categoriaAleatoria === 0) {
-    categoria.textContent = 'Cat: Naturaleza'
-    array_Palabras = definirPalabrasNaturaleza()
-    array_Explicacion = definirExplicacionNaturaleza()
-    array_Imgs = imgNaturaleza()
-} else if (categoriaAleatoria === 1) {
-    categoria.textContent = 'Cat: Tecnologia'
-    array_Palabras = definirPalabrasTecnologia()
-    array_Explicacion = definirExplicacionTecnologia()
-    array_Imgs = imgTecnologia()    
-} else {
-    categoria.textContent = 'Cat: Musica'
-    array_Palabras = definirPalabrasMusica()
-    array_Explicacion = definirExplicacionMusica()
-    array_Imgs = imgMusica()  
-}
-let parabraAleatoria = Math.floor(Math.random() * array_Palabras.length);
 let letrasSeleccionadas = []
 let array_mascara = []
 let fallos = 0
@@ -44,11 +32,62 @@ let fraseCompleta = ''
 const wordContainer = palabras
 let palabraAdivinada = false
 let juegoAcabado = false
-let palabraParaEncontrar = array_Palabras[parabraAleatoria].palabra
-let palabraParaEncontrarSeparada = palabraParaEncontrar.split('')
+let parabraAleatoria
+let palabraParaEncontrar
+if (!localStorage.getItem(localStorageJugando)) {
+    let categoriaAleatoria = Math.floor(Math.random() * 3)
+    if (categoriaAleatoria === 0) {
+        categoria.textContent = 'Cat: Naturaleza'
+        array_Palabras = definirPalabrasNaturaleza()
+        array_Explicacion = definirExplicacionNaturaleza()
+        array_Imgs = imgNaturaleza()
+        localStorage.setItem(localStorageCategoria, 'naturaleza')
+    } else if (categoriaAleatoria === 1) {
+        categoria.textContent = 'Cat: Tecnologia'
+        array_Palabras = definirPalabrasTecnologia()
+        array_Explicacion = definirExplicacionTecnologia()
+        array_Imgs = imgTecnologia()    
+        localStorage.setItem(localStorageCategoria, 'tecnologia')
+    } else {
+        categoria.textContent = 'Cat: Musica'
+        array_Palabras = definirPalabrasMusica()
+        array_Explicacion = definirExplicacionMusica()
+        array_Imgs = imgMusica() 
+        localStorage.setItem(localStorageCategoria, 'musica') 
+    }
+    parabraAleatoria = Math.floor(Math.random() * array_Palabras.length);
+    palabraParaEncontrar = array_Palabras[parabraAleatoria].palabra
+    localStorage.setItem(localStoragePalabra, palabraParaEncontrar)
+// SESIONES LOCALES DE LOS ARRAYS
+    let stringArrayPalabras = JSON.stringify(array_Palabras)
+    localStorage.setItem('arrayPalabras', stringArrayPalabras)
+
+    let stringArrayExp = JSON.stringify(array_Explicacion)
+    localStorage.setItem('arrayExp', stringArrayExp)
+
+    let stringArrayImg = JSON.stringify(array_Imgs)
+    localStorage.setItem('arrayImg', stringArrayImg)
+
+    jugando = true
+    localStorage.setItem('palabraAleatoria', parabraAleatoria)
+    localStorage.setItem(localStorageJugando, jugando)
+    console.log('Guardado...');
+}
+
+let palabraParaEncontrarSeparada = localStorage.getItem(localStoragePalabra).split('')
+categoria.textContent = localStorage.getItem(localStorageCategoria)
+let letrasUsadas = ''
+let arrayStringsLocalStorage = []
 mostrarMascara()
 mostrarLetras()
-// mostrarPalabraEncontrada()
+// QUITADO DE MOMENTO, HACER NUEVA FUNCION PARA BLOQUEAR LETRAS USANDO LA LOCALSTORAGE
+if (localStorage.getItem('letrasUsadas')) {
+    arrayStringsLocalStorage = localStorage.getItem('letrasUsadas').split('')
+    console.log(arrayStringsLocalStorage);
+    bloquearPalabras()
+    comprovarPalabrasSeleccionadas(arrayStringsLocalStorage)
+    // comprovarPalabrasSeleccionadas(localStorage.getItem('letrasUsadas'))
+}
 document.addEventListener("keyup", function(event) {
     if (teclaDeshabilitada.has(event.code) || teclaDeshabilitada.has(event.key)) {
         event.preventDefault()
@@ -56,19 +95,35 @@ document.addEventListener("keyup", function(event) {
         if (event.code === 'KeyA' || event.code === 'KeyB' || event.code === 'KeyC' || event.code === 'KeyD' || event.code === 'KeyE' || event.code === 'KeyF' || event.code === 'KeyG' || event.code === 'KeyH' || event.code === 'KeyI' || event.code === 'KeyJ' || event.code === 'KeyK' || event.code === 'KeyL' || event.code === 'KeyM' || event.code === 'KeyN' || event.code === 'KeyO' || event.code === 'KeyP' || event.code === 'KeyQ' || event.code === 'KeyR' || event.code === 'KeyS' || event.code === 'KeyT' || event.code === 'KeyU' || event.code === 'KeyV' || event.code === 'KeyW' || event.code === 'KeyX' || event.code === 'KeyY' || event.code === 'KeyZ' || event.key === 'ñ') {
             if (!palabraAdivinada) {
                 teclado = true
+                letrasUsadas += event.key
+                localStorage.setItem('letrasUsadas', letrasUsadas)
                 comprovarPalabrasSeleccionadas(event)
                 teclaDeshabilitada.add(event.code)
             }
+            // teclaDeshabilitada.add(localStorage.getItem('letrasUsadas'))
         }
         if (fallos === 5 || juegoAcabado || ganado) {
             if (ganado) {
                 fraseAlAcabar = 'Has ganado,'
+                jugando = false
+                // localStorage.setItem(localStorageJugando, jugando)
             } else if (fallos === 5) {
                 fraseAlAcabar = 'Has perdido,'
             } 
-            mensajeAcabar.textContent = fraseAlAcabar + ' la palabra era: "' + array_Palabras[parabraAleatoria].palabra + '". ' + array_Explicacion[parabraAleatoria].exp
+            // SACAR LOS VALORES DE LAS SESIONES
+            stringArray = localStorage.getItem('arrayPalabras')
+            arrayEnString = JSON.parse(stringArray)
+
+            stringArrayExp = localStorage.getItem('arrayExp')
+            arrayExpEnString = JSON.parse(stringArrayExp)
+
+            stringArrayImg = localStorage.getItem('arrayImg')
+            arrayImgEnString = JSON.parse(stringArrayImg)
+
+            mensajeAcabar.textContent = fraseAlAcabar + ' la palabra era: "' + arrayEnString[parseInt(localStorage.getItem('palabraAleatoria'))].palabra + '". ' + arrayExpEnString[parseInt(localStorage.getItem('palabraAleatoria'))].exp
             imagenAcabar.style.display = 'inline'
-            imagenAcabar.src = array_Imgs[parabraAleatoria].img
+            imagenAcabar.src = arrayImgEnString[parseInt(localStorage.getItem('palabraAleatoria'))].img
+            localStorage.clear()
         }
     }
 });  
@@ -82,10 +137,26 @@ wordContainer.addEventListener('click', event => {
     if (fallos === 5 || juegoAcabado || ganado) {
         if (ganado) {
             fraseAlAcabar = 'Has ganado,'
+            jugando = false
+            localStorage.clear()
+            // localStorage.setItem(localStorageJugando, jugando)
         } else if (fallos === 5) {
             fraseAlAcabar = 'Has perdido,'
         } 
-        mensajeAcabar.textContent = fraseAlAcabar + ' la palabra era: "' + array_Palabras[parabraAleatoria].palabra + '"'
+        // SACAR LOS VALORES DE LAS SESIONES
+        stringArray = localStorage.getItem('arrayPalabras')
+        arrayEnString = JSON.parse(stringArray)
+
+        stringArrayExp = localStorage.getItem('arrayExp')
+        arrayExpEnString = JSON.parse(stringArrayExp)
+
+        stringArrayImg = localStorage.getItem('arrayImg')
+        arrayImgEnString = JSON.parse(stringArrayImg)
+
+        mensajeAcabar.textContent = fraseAlAcabar + ' la palabra era: "' + arrayEnString[parseInt(localStorage.getItem('palabraAleatoria'))].palabra + '". ' + arrayExpEnString[parseInt(localStorage.getItem('palabraAleatoria'))].exp
+        imagenAcabar.style.display = 'inline'
+        imagenAcabar.src = arrayImgEnString[parseInt(localStorage.getItem('palabraAleatoria'))].img
+        localStorage.clear()
     }
 });
 function update() {
@@ -93,39 +164,75 @@ function update() {
    
 }
 function comprovarPalabrasSeleccionadas(event) {
-    let invalidarLetra
-    let evento
-    for (let index = 0; index < palabraParaEncontrar.length; index++) {
+    if (event !== localStorage.getItem('letrasUsadas')) {
+        for (let index = 0; index < localStorage.getItem(localStoragePalabra).length; index++) {
+            let eventPorCadaLetraDelArray = ''
         //He colocado alguna letra o no?.
-        if (teclado) {
-            evento = event.key
-        } else {
-            evento = event.target.textContent
+        // if (event === localStorage.getItem('letrasUsadas')) {
+            if (event[index] === localStorage.getItem('letrasUsadas')) {
+            eventPorCadaLetraDelArray = localStorage.getItem('letrasUsadas')
+            // evento = localStorage.getItem('letrasUsadas')
+            ponerPalabraEnMascaraYMostrarError(eventPorCadaLetraDelArray)
+            }
+            bloquearPalabras()
         }
-        if (evento.toLowerCase() == palabraParaEncontrar[index]) {
+    } else {
+        for (let index = 0; index < localStorage.getItem(localStoragePalabra).length; index++) {
+            if (teclado) {
+                evento = event.key
+            } else {
+                evento = event.target.textContent
+            }
+            ponerPalabraEnMascaraYMostrarError(evento)
+        }
+    }
+   
+// else {
+//     if (teclado) {
+//         evento = event.key
+//     } else {
+//         evento = event.target.textContent
+//     }
+//     ponerPalabraEnMascaraYMostrarError(evento)
+// }
+function ponerPalabraEnMascaraYMostrarError (evento) {
+     // if (evento.toLowerCase() == palabraParaEncontrar[index]) {
+        if (evento.toLowerCase() == localStorage.getItem(localStoragePalabra)[index]) {
             array_mascara[index].textContent = evento.toLowerCase()
             salir=index;
             aciertos++
         } 
     }
-    if(!(palabraParaEncontrar[salir] == evento.toLowerCase())){
+    if(!(localStorage.getItem(localStoragePalabra)[salir] == evento.toLowerCase())){
+    // if(!(palabraParaEncontrar[salir] == evento.toLowerCase())){
         errores++;
         fallos++;
         mostrarErrores.textContent = 'Errores: ' + fallos
         mostrarImagenesError(fallos)
     }
-    if (aciertos >= palabraParaEncontrar.length) {
+    if (aciertos >= localStorage.getItem(localStoragePalabra).length) {
+    // if (aciertos >= palabraParaEncontrar.length) {
         ganado = true
     }
-    let blancoTransparente = 'rgba(255, 255, 255, 0.638)'
-    invalidarLetra = arrayLetras.indexOf(evento.toLowerCase())
-    letrasSeleccionadas[invalidarLetra].style.transition = '0.8s'
-    letrasSeleccionadas[invalidarLetra].style.backgroundColor = blancoTransparente
-    letrasSeleccionadas[invalidarLetra].style.pointerEvents = 'none'
-    letrasSeleccionadas[invalidarLetra].style.transform = 'rotateY(180deg)'
-    // if (fraseCompleta === palabraParaEncontrar) {
-    //     ganado = true
-    // }      
+}
+function bloquearPalabras() {
+    // let letra = document.getElementById(evento)
+    
+    for (let index = 0; index < arrayStringsLocalStorage.length; index++) {
+        let letras = document.getElementById(arrayStringsLocalStorage[index].toLowerCase())
+        let blancoTransparente = 'rgba(255, 255, 255, 0.638)'
+        letras.style.transition = '0.8s'
+        letras.style.backgroundColor = blancoTransparente
+        letras.style.pointerEvents = 'none'
+        letras.style.transform = 'rotateY(180deg)'   
+    }
+    // let letras = document.getElementById(localStorage.getItem('letrasUsadas').toLowerCase())
+    // let blancoTransparente = 'rgba(255, 255, 255, 0.638)'
+    // letras.style.transition = '0.8s'
+    // letras.style.backgroundColor = blancoTransparente
+    // letras.style.pointerEvents = 'none'
+    // letras.style.transform = 'rotateY(180deg)'  
+
 }
 function definirArrayLetras() {
     return ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'ñ', 'z', 'x', 'c', 'v', 'b', 'n', 'm']
@@ -172,7 +279,7 @@ function imgNaturaleza() {{
         {img: "../img/pradera.png"},
     ]
 }}
-function definirPalabrasTecnologia() {
+function definirPalabrasTecnologia() {  
     return [
          { palabra: "algortimo" },
          { palabra: "inteligencia artificial" },
@@ -257,14 +364,18 @@ function imgMusica() {{
     ]
 }}
 function mostrarMascara() {
-    for (let index = 0; index < array_Palabras[parabraAleatoria].palabra.length; index++) {
+    let stringArray = localStorage.getItem('arrayPalabras')
+    let arrayEnString = JSON.parse(stringArray)
+    for (let index = 0; index < arrayEnString[parseInt(localStorage.getItem('palabraAleatoria'))].palabra.length; index++) {
+        // for (let index = 0; index < array_Palabras[parabraAleatoria].palabra.length; index++) {
         const mascara = document.createElement('span')
         document.querySelector('#palabraAdivinar').appendChild(mascara)
         mascara.classList.add('showMask')
         array_mascara.push(mascara)
         // Falta un <= porque sino da error
         for (let index2 = 0; index2 < array_mascara.length; index2++) {
-            if (palabraParaEncontrar[index2] === ' ') {
+            if (localStorage.getItem(localStoragePalabra)[index2] === ' ') {
+            // if (palabraParaEncontrar[index2] === ' ') {
                 array_mascara[index2].classList.add('espacio')
                 array_mascara[index2].textContent = ' '
                 aciertos = 1
@@ -274,7 +385,6 @@ function mostrarMascara() {
                 mascara.textContent = '_ '
             }
         }
-        
     }
 }
 function mostrarLetras() {
@@ -284,6 +394,7 @@ function mostrarLetras() {
         span.textContent = arrayLetras[index]
         span.classList.add('spanOptions')
         span.classList.add('columnaCustom')
+        span.id = arrayLetras[index]
         if (arrayLetras[index] === ' ') {
             span.classList.add('teclaEspacio')
         }
