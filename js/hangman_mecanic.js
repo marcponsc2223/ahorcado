@@ -59,7 +59,7 @@ if (!localStorage.getItem(localStorageJugando)) {
     parabraAleatoria = Math.floor(Math.random() * array_Palabras.length);
     palabraParaEncontrar = array_Palabras[parabraAleatoria].palabra
     localStorage.setItem(localStoragePalabra, palabraParaEncontrar)
-// SESIONES LOCALES DE LOS ARRAYS
+    // SESIONES LOCALES DE LOS ARRAYS
     let stringArrayPalabras = JSON.stringify(array_Palabras)
     localStorage.setItem('arrayPalabras', stringArrayPalabras)
 
@@ -84,14 +84,10 @@ mostrarLetras()
 // QUITADO DE MOMENTO, HACER NUEVA FUNCION PARA BLOQUEAR LETRAS USANDO LA LOCALSTORAGE
 if (localStorage.getItem('letrasUsadas')) {
     arrayStringsLocalStorage = localStorage.getItem('letrasUsadas').split('')
-    // bloquearPalabras()
-    // bloqueoAntesDeJugar(arrayStringsLocalStorage)
     for (let index = 0; index < arrayStringsLocalStorage.length; index++) {
         teclaDeshabilitada.add(arrayStringsLocalStorage[index])
-        // array_mascara[index].textContent = evento.toLowerCase()
     }
     comprovarPalabrasSeleccionadas(arrayStringsLocalStorage)
-    // comprovarPalabrasSeleccionadas(localStorage.getItem('letrasUsadas'))
     letrasDelPrincipio = false
 }
 document.addEventListener("keyup", function(event) {
@@ -109,17 +105,13 @@ document.addEventListener("keyup", function(event) {
                 localStorage.setItem('letrasUsadas', letrasUsadas)
                 arrayStringsLocalStorage = localStorage.getItem('letrasUsadas').split('')
                 comprovarPalabrasSeleccionadas(event)
-                // comprovarPalabrasSeleccionadas(event)
-                // teclaDeshabilitada.add(localStorage.getItem('letrasUsadas'))
                 teclaDeshabilitada.add(event.code)
             }
-            // teclaDeshabilitada.add(localStorage.getItem('letrasUsadas'))
         }
         if (fallos === 5 || juegoAcabado || ganado) {
             if (ganado) {
                 fraseAlAcabar = 'Has ganado,'
                 jugando = false
-                // localStorage.setItem(localStorageJugando, jugando)
             } else if (fallos === 5) {
                 fraseAlAcabar = 'Has perdido,'
             } 
@@ -137,41 +129,41 @@ document.addEventListener("keyup", function(event) {
             imagenAcabar.style.display = 'inline'
             imagenAcabar.src = arrayImgEnString[parseInt(localStorage.getItem('palabraAleatoria'))].img
             localStorage.clear()
+            tiempo = 0
         }
     }
 });  
-wordContainer.addEventListener('click', event => {
-    if (event.target.tagName === 'SPAN') {
-        if (!palabraAdivinada) {
-            teclado = false
-            comprovarPalabrasSeleccionadas(event)
-        }
-    }
-    if (fallos === 5 || juegoAcabado || ganado) {
-        if (ganado) {
-            fraseAlAcabar = 'Has ganado,'
-            jugando = false
-            localStorage.clear()
-            // localStorage.setItem(localStorageJugando, jugando)
-        } else if (fallos === 5) {
-            fraseAlAcabar = 'Has perdido,'
-        } 
-        // SACAR LOS VALORES DE LAS SESIONES
-        stringArray = localStorage.getItem('arrayPalabras')
-        arrayEnString = JSON.parse(stringArray)
+// wordContainer.addEventListener('click', event => {
+//     if (event.target.tagName === 'SPAN') {
+//         if (!palabraAdivinada) {
+//             teclado = false
+//             comprovarPalabrasSeleccionadas(event)
+//         }
+//     }
+//     if (fallos === 5 || juegoAcabado || ganado) {
+//         if (ganado) {
+//             fraseAlAcabar = 'Has ganado,'
+//             jugando = false
+//             localStorage.clear()
+//         } else if (fallos === 5) {
+//             fraseAlAcabar = 'Has perdido,'
+//         } 
+//         // SACAR LOS VALORES DE LAS SESIONES
+//         stringArray = localStorage.getItem('arrayPalabras')
+//         arrayEnString = JSON.parse(stringArray)
 
-        stringArrayExp = localStorage.getItem('arrayExp')
-        arrayExpEnString = JSON.parse(stringArrayExp)
+//         stringArrayExp = localStorage.getItem('arrayExp')
+//         arrayExpEnString = JSON.parse(stringArrayExp)
 
-        stringArrayImg = localStorage.getItem('arrayImg')
-        arrayImgEnString = JSON.parse(stringArrayImg)
+//         stringArrayImg = localStorage.getItem('arrayImg')
+//         arrayImgEnString = JSON.parse(stringArrayImg)
 
-        mensajeAcabar.textContent = fraseAlAcabar + ' la palabra era: "' + arrayEnString[parseInt(localStorage.getItem('palabraAleatoria'))].palabra + '". ' + arrayExpEnString[parseInt(localStorage.getItem('palabraAleatoria'))].exp
-        imagenAcabar.style.display = 'inline'
-        imagenAcabar.src = arrayImgEnString[parseInt(localStorage.getItem('palabraAleatoria'))].img
-        localStorage.clear()
-    }
-});
+//         mensajeAcabar.textContent = fraseAlAcabar + ' la palabra era: "' + arrayEnString[parseInt(localStorage.getItem('palabraAleatoria'))].palabra + '". ' + arrayExpEnString[parseInt(localStorage.getItem('palabraAleatoria'))].exp
+//         imagenAcabar.style.display = 'inline'
+//         imagenAcabar.src = arrayImgEnString[parseInt(localStorage.getItem('palabraAleatoria'))].img
+//         localStorage.clear()
+//     }
+// });
 function update() {
     contador()
    
@@ -183,7 +175,6 @@ function comprovarPalabrasSeleccionadas(event) {
                 if (event[tamanoEvent].toLowerCase() === localStorage.getItem(localStoragePalabra)[index]) {
                     array_mascara[index].textContent = event[tamanoEvent].toLowerCase()
                     salir=index;
-                    // aciertos++
                 }   
             }
             evento = event
@@ -197,17 +188,18 @@ function comprovarPalabrasSeleccionadas(event) {
             if (evento.toLowerCase() == localStorage.getItem(localStoragePalabra)[index]) {
                 array_mascara[index].textContent = evento.toLowerCase()
                 salir=index;
+                // Actualizar los datos de la localStorage de los aciertos.
+                if (localStorage.getItem('aciertos')) {
+                    aciertos = localStorage.getItem('aciertos')
+                }
                 aciertos++
+                localStorage.setItem('aciertos', aciertos)
             } 
         }
     } 
-    console.log(letrasDelPrincipio);
     if (letrasDelPrincipio) {
         for (let index2 = 0; index2 < event.length; index2++) {
             if(!(localStorage.getItem(localStoragePalabra)[salir] == evento[index2].toLowerCase())){
-                // if(!(palabraParaEncontrar[salir] == evento.toLowerCase())){
-                    // errores++;
-                    // fallos++;
                     if (localStorage.getItem('fallos')) {                    
                         mostrarErrores.textContent = 'Errores: ' + localStorage.getItem('fallos')
                         mostrarImagenesError(localStorage.getItem('fallos'))   
@@ -216,24 +208,22 @@ function comprovarPalabrasSeleccionadas(event) {
         }
     } else {
         if(!(localStorage.getItem(localStoragePalabra)[salir] == evento.toLowerCase())){
-            // if(!(palabraParaEncontrar[salir] == evento.toLowerCase())){
                 if (localStorage.getItem('fallos')) {
                     fallos = localStorage.getItem('fallos')
                 }
                 errores++
                 fallos++
-                //  else {
                 localStorage.setItem('fallos', fallos)
-                // }
                 mostrarErrores.textContent = 'Errores: ' + fallos
                 mostrarImagenesError(fallos)
             } 
     }
-     if (aciertos >= localStorage.getItem(localStoragePalabra).length) {
-    // if (aciertos >= palabraParaEncontrar.length) {
+     if (parseInt(localStorage.getItem('aciertos')) >= localStorage.getItem(localStoragePalabra).length) {
         ganado = true
+        setTimeout(() => {
+            location.reload()
+        }, 3000);
     }
-    // ponerPalabraEnMascaraYMostrarError(evento)
     bloquearPalabras()
 }
 function bloqueoAntesDeJugar(event) {
@@ -241,12 +231,7 @@ function bloqueoAntesDeJugar(event) {
         let eventPorCadaLetraDelArray = ''
         if (event[index] === localStorage.getItem('letrasUsadas')) {
             eventPorCadaLetraDelArray = event[index]
-            // evento = localStorage.getItem('letrasUsadas')
-            // ponerPalabraEnMascaraYMostrarError(eventPorCadaLetraDelArray, index);
         } 
-        // if (event[index].toLowerCase() === localStorage.getItem(localStoragePalabra)[index]) {
-        //     array_mascara[index].textContent = event[index].toLowerCase()
-        // }
         bloquearPalabras()
     }
 }
@@ -297,14 +282,7 @@ function bloquearPalabras() {
         letras.style.backgroundColor = blancoTransparente
         letras.style.pointerEvents = 'none'
         letras.style.transform = 'rotateY(180deg)'   
-    }
-    // let letras = document.getElementById(localStorage.getItem('letrasUsadas').toLowerCase())
-    // let blancoTransparente = 'rgba(255, 255, 255, 0.638)'
-    // letras.style.transition = '0.8s'
-    // letras.style.backgroundColor = blancoTransparente
-    // letras.style.pointerEvents = 'none'
-    // letras.style.transform = 'rotateY(180deg)'  
-
+    } 
 }
 function definirArrayLetras() {
     return ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'ñ', 'z', 'x', 'c', 'v', 'b', 'n', 'm']
@@ -482,8 +460,12 @@ function mostrarLetras() {
 function contador() {
     if (fallos < 5 && !juegoAcabado && !ganado) {
         setTimeout(() => {
+            if (localStorage.getItem('tiempo')) {
+             tiempo = localStorage.getItem('tiempo')   
+            }
             cronometro.textContent = 'Tiempo: '+ tiempo
             tiempo++
+            localStorage.setItem('tiempo', tiempo)
         }, 1000);
     }    
 }
