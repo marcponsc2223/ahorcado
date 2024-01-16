@@ -74,7 +74,11 @@ button {
     position: absolute;
     top: 80px;
     left: 100px;
-
+}
+#nombreJugador {
+    position: absolute;
+    top: 120px;
+    left: 100px;
 }
 .teclaEspacio{
     width: 500px !important

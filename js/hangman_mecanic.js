@@ -11,6 +11,7 @@ let ahorcado = document.getElementById('hangman')
 let mensajeAcabar = document.getElementById('mensajeAlAcabar')
 let imagenAcabar = document.getElementById('imgAcabar')
 let categoria = document.getElementById('categoria')
+
 let arrayLetras = definirArrayLetras()
 let invalidarLetra
 let evento
@@ -35,6 +36,8 @@ let juegoAcabado = false
 let parabraAleatoria
 let palabraParaEncontrar
 let letrasDelPrincipio = true
+
+
 /** Creando las local storages */
 if (!localStorage.getItem(localStorageJugando)) {
     let categoriaAleatoria = Math.floor(Math.random() * 3)
@@ -73,7 +76,8 @@ if (!localStorage.getItem(localStorageJugando)) {
     jugando = true
     localStorage.setItem('palabraAleatoria', parabraAleatoria)
     localStorage.setItem(localStorageJugando, jugando)
-    console.log('Guardado...');
+    
+    cartelNombreJugador.textContent = 'Nombre: ' + localStorage.getItem('nombre')
 }
 let palabraParaEncontrarSeparada = localStorage.getItem(localStoragePalabra).split('')
 categoria.textContent = localStorage.getItem(localStorageCategoria)
@@ -90,8 +94,9 @@ if (localStorage.getItem('letrasUsadas')) {
     comprovarPalabrasSeleccionadas(arrayStringsLocalStorage)
     letrasDelPrincipio = false
 }
-/** Evento para escribir la letra con el teclado. */
-document.addEventListener("keyup", function(event) {
+function empezarJuego() {
+    /** Evento para escribir la letra con el teclado. */
+    document.addEventListener("keyup", function(event) {
     if (teclaDeshabilitada.has(event.code) || teclaDeshabilitada.has(event.key)) {
         event.preventDefault()
     } else {
@@ -119,13 +124,13 @@ document.addEventListener("keyup", function(event) {
             // SACAR LOS VALORES DE LAS SESIONES
             stringArray = localStorage.getItem('arrayPalabras')
             arrayEnString = JSON.parse(stringArray)
-
+    
             stringArrayExp = localStorage.getItem('arrayExp')
             arrayExpEnString = JSON.parse(stringArrayExp)
-
+    
             stringArrayImg = localStorage.getItem('arrayImg')
             arrayImgEnString = JSON.parse(stringArrayImg)
-
+    
             mensajeAcabar.textContent = fraseAlAcabar + ' la palabra era: "' + arrayEnString[parseInt(localStorage.getItem('palabraAleatoria'))].palabra + '". ' + arrayExpEnString[parseInt(localStorage.getItem('palabraAleatoria'))].exp
             imagenAcabar.style.display = 'inline'
             imagenAcabar.src = arrayImgEnString[parseInt(localStorage.getItem('palabraAleatoria'))].img
@@ -134,9 +139,9 @@ document.addEventListener("keyup", function(event) {
             recargarPagina()
         }
     }
-}); 
-/** Evento para clickar la letra. */ 
-wordContainer.addEventListener('click', event => {
+    }); 
+    /** Evento para clickar la letra. */ 
+    wordContainer.addEventListener('click', event => {
     if (event.target.tagName === 'SPAN') {
         if (!palabraAdivinada) {
             teclado = false
@@ -160,13 +165,13 @@ wordContainer.addEventListener('click', event => {
         // SACAR LOS VALORES DE LAS SESIONES
         stringArray = localStorage.getItem('arrayPalabras')
         arrayEnString = JSON.parse(stringArray)
-
+    
         stringArrayExp = localStorage.getItem('arrayExp')
         arrayExpEnString = JSON.parse(stringArrayExp)
-
+    
         stringArrayImg = localStorage.getItem('arrayImg')
         arrayImgEnString = JSON.parse(stringArrayImg)
-
+    
         mensajeAcabar.textContent = fraseAlAcabar + ' la palabra era: "' + arrayEnString[parseInt(localStorage.getItem('palabraAleatoria'))].palabra + '". ' + arrayExpEnString[parseInt(localStorage.getItem('palabraAleatoria'))].exp
         imagenAcabar.style.display = 'inline'
         imagenAcabar.src = arrayImgEnString[parseInt(localStorage.getItem('palabraAleatoria'))].img
@@ -174,7 +179,8 @@ wordContainer.addEventListener('click', event => {
         tiempo = 0
         recargarPagina()
     }
-});
+    });
+}
 /** Función para llamar al contador. */
 function update() {
     contador()
@@ -192,7 +198,6 @@ function comprovarPalabrasSeleccionadas(event) {
             }
             evento = event
         } else {
-            console.log(aciertos);
             //He colocado alguna letra o no?.
             if (teclado) {
                 evento = event.key
@@ -406,7 +411,6 @@ function mostrarMascara() {
                 array_mascara[index2].classList.add('espacio')
                 array_mascara[index2].textContent = ' '
                 aciertos = 1
-                console.log('espacio puesto');
             } else {
                 array_mascara[index2].classList.remove('espacio')
                 mascara.textContent = '_ '
