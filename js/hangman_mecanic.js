@@ -35,6 +35,7 @@ let juegoAcabado = false
 let parabraAleatoria
 let palabraParaEncontrar
 let letrasDelPrincipio = true
+/** Creando las local storages */
 if (!localStorage.getItem(localStorageJugando)) {
     let categoriaAleatoria = Math.floor(Math.random() * 3)
     if (categoriaAleatoria === 0) {
@@ -74,14 +75,13 @@ if (!localStorage.getItem(localStorageJugando)) {
     localStorage.setItem(localStorageJugando, jugando)
     console.log('Guardado...');
 }
-
 let palabraParaEncontrarSeparada = localStorage.getItem(localStoragePalabra).split('')
 categoria.textContent = localStorage.getItem(localStorageCategoria)
 let letrasUsadas = ''
 let arrayStringsLocalStorage = []
 mostrarMascara()
 mostrarLetras()
-// QUITADO DE MOMENTO, HACER NUEVA FUNCION PARA BLOQUEAR LETRAS USANDO LA LOCALSTORAGE
+/** Condición para bloquear las letras usadas cuando recargue la página. */
 if (localStorage.getItem('letrasUsadas')) {
     arrayStringsLocalStorage = localStorage.getItem('letrasUsadas').split('')
     for (let index = 0; index < arrayStringsLocalStorage.length; index++) {
@@ -90,6 +90,7 @@ if (localStorage.getItem('letrasUsadas')) {
     comprovarPalabrasSeleccionadas(arrayStringsLocalStorage)
     letrasDelPrincipio = false
 }
+/** Evento para escribir la letra con el teclado. */
 document.addEventListener("keyup", function(event) {
     if (teclaDeshabilitada.has(event.code) || teclaDeshabilitada.has(event.key)) {
         event.preventDefault()
@@ -132,42 +133,52 @@ document.addEventListener("keyup", function(event) {
             tiempo = 0
         }
     }
-});  
-// wordContainer.addEventListener('click', event => {
-//     if (event.target.tagName === 'SPAN') {
-//         if (!palabraAdivinada) {
-//             teclado = false
-//             comprovarPalabrasSeleccionadas(event)
-//         }
-//     }
-//     if (fallos === 5 || juegoAcabado || ganado) {
-//         if (ganado) {
-//             fraseAlAcabar = 'Has ganado,'
-//             jugando = false
-//             localStorage.clear()
-//         } else if (fallos === 5) {
-//             fraseAlAcabar = 'Has perdido,'
-//         } 
-//         // SACAR LOS VALORES DE LAS SESIONES
-//         stringArray = localStorage.getItem('arrayPalabras')
-//         arrayEnString = JSON.parse(stringArray)
+}); 
+/** Evento para clickar la letra. */ 
+wordContainer.addEventListener('click', event => {
+    if (event.target.tagName === 'SPAN') {
+        if (!palabraAdivinada) {
+            teclado = false
+            if (localStorage.getItem('letrasUsadas')) {
+                letrasUsadas = localStorage.getItem('letrasUsadas')
+            }
+            letrasDelPrincipio = false
+            letrasUsadas += event.target.textContent
+            localStorage.setItem('letrasUsadas', letrasUsadas)
+            arrayStringsLocalStorage = localStorage.getItem('letrasUsadas').split('')
+            comprovarPalabrasSeleccionadas(event)
+        }
+    }
+    if (fallos === 5 || juegoAcabado || ganado) {
+        if (ganado) {
+            fraseAlAcabar = 'Has ganado,'
+            jugando = false
+        } else if (fallos === 5) {
+            fraseAlAcabar = 'Has perdido,'
+        } 
+        // SACAR LOS VALORES DE LAS SESIONES
+        stringArray = localStorage.getItem('arrayPalabras')
+        arrayEnString = JSON.parse(stringArray)
 
-//         stringArrayExp = localStorage.getItem('arrayExp')
-//         arrayExpEnString = JSON.parse(stringArrayExp)
+        stringArrayExp = localStorage.getItem('arrayExp')
+        arrayExpEnString = JSON.parse(stringArrayExp)
 
-//         stringArrayImg = localStorage.getItem('arrayImg')
-//         arrayImgEnString = JSON.parse(stringArrayImg)
+        stringArrayImg = localStorage.getItem('arrayImg')
+        arrayImgEnString = JSON.parse(stringArrayImg)
 
-//         mensajeAcabar.textContent = fraseAlAcabar + ' la palabra era: "' + arrayEnString[parseInt(localStorage.getItem('palabraAleatoria'))].palabra + '". ' + arrayExpEnString[parseInt(localStorage.getItem('palabraAleatoria'))].exp
-//         imagenAcabar.style.display = 'inline'
-//         imagenAcabar.src = arrayImgEnString[parseInt(localStorage.getItem('palabraAleatoria'))].img
-//         localStorage.clear()
-//     }
-// });
+        mensajeAcabar.textContent = fraseAlAcabar + ' la palabra era: "' + arrayEnString[parseInt(localStorage.getItem('palabraAleatoria'))].palabra + '". ' + arrayExpEnString[parseInt(localStorage.getItem('palabraAleatoria'))].exp
+        imagenAcabar.style.display = 'inline'
+        imagenAcabar.src = arrayImgEnString[parseInt(localStorage.getItem('palabraAleatoria'))].img
+        localStorage.clear()
+        tiempo = 0
+    }
+});
+/** Función para llamar al contador. */
 function update() {
     contador()
    
 }
+/** Función para comprovar si la letra está en la palabra o no mediante las local storage. */
 function comprovarPalabrasSeleccionadas(event) {
     for (let index = 0; index < localStorage.getItem(localStoragePalabra).length; index++) {
         if (letrasDelPrincipio) {
@@ -179,6 +190,7 @@ function comprovarPalabrasSeleccionadas(event) {
             }
             evento = event
         } else {
+            console.log(aciertos);
             //He colocado alguna letra o no?.
             if (teclado) {
                 evento = event.key
@@ -222,10 +234,11 @@ function comprovarPalabrasSeleccionadas(event) {
         ganado = true
         setTimeout(() => {
             location.reload()
-        }, 3000);
+        }, 7000);
     }
     bloquearPalabras()
 }
+/** Función para bloquear la letra una vez la ha pulsado en caso de que recargue la página. */
 function bloqueoAntesDeJugar(event) {
     for (let index = 0; index < localStorage.getItem('letrasUsadas').length; index++) {
         let eventPorCadaLetraDelArray = ''
@@ -235,46 +248,8 @@ function bloqueoAntesDeJugar(event) {
         bloquearPalabras()
     }
 }
-function ponerPalabraEnMascaraYMostrarError (evento) {
-     // if (evento.toLowerCase() == palabraParaEncontrar[index]) {
-    for (let index2 = 0; index2 < localStorage.getItem(localStoragePalabra).length; index2++) {
-        // He colocado alguna letra o no?
-        // if (evento.toLowerCase() == localStorage.getItem(localStoragePalabra)[index2]) {
-        //     array_mascara[index2].textContent = evento.toLowerCase()
-        //     salir=index2;
-        //     aciertos++
-        // }  
-    }
-    // if(!(localStorage.getItem(localStoragePalabra)[salir] == evento.toLowerCase())){
-    // // if(!(palabraParaEncontrar[salir] == evento.toLowerCase())){
-    //     errores++;
-    //     fallos++;
-    //     mostrarErrores.textContent = 'Errores: ' + fallos
-    //     mostrarImagenesError(fallos)
-    // }
-    // if (aciertos >= localStorage.getItem(localStoragePalabra).length) {
-    // // if (aciertos >= palabraParaEncontrar.length) {
-    //     ganado = true
-    // }
-     //Bucle para buscar la letra en la palabra y modificar la matriz.
-    //  for (let j = 0; j < paraules2[paraula].length(); j++) {
-    //     //He colocado alguna letra o no?.
-    //     if (evento.toLowerCase() === localStorage.getItem(localStoragePalabra)[index]) {
-    //         matriz[j]=letter;
-    //         aciertos++;
-    //         salir=j;
-    //     }
-    // }
-    // //No he colocado la letra, con los mensajes de error.
-    // if(!(paraules2[paraula].charAt(salir)==letter)){
-    //     System.out.println("Tens "+exit+"/6 errors");
-    //     errorCount++;
-    //     exit++;
-    // }
-    
-}
+/** Función para bloquear la letra una vez la ha pulsado. */
 function bloquearPalabras() {
-    // let letra = document.getElementById(evento)
     for (let index = 0; index < arrayStringsLocalStorage.length; index++) {
         let letras = document.getElementById(arrayStringsLocalStorage[index].toLowerCase())
         let blancoTransparente = 'rgba(255, 255, 255, 0.638)'
@@ -413,19 +388,17 @@ function imgMusica() {{
         {img: "../img/sinfonia.jpg"},
     ]
 }}
+/** Función para mostrar la máscara de letras de la palabra en guíones. */
 function mostrarMascara() {
     let stringArray = localStorage.getItem('arrayPalabras')
     let arrayEnString = JSON.parse(stringArray)
     for (let index = 0; index < arrayEnString[parseInt(localStorage.getItem('palabraAleatoria'))].palabra.length; index++) {
-        // for (let index = 0; index < array_Palabras[parabraAleatoria].palabra.length; index++) {
         const mascara = document.createElement('span')
         document.querySelector('#palabraAdivinar').appendChild(mascara)
         mascara.classList.add('showMask')
         array_mascara.push(mascara)
-        // Falta un <= porque sino da error
         for (let index2 = 0; index2 < array_mascara.length; index2++) {
             if (localStorage.getItem(localStoragePalabra)[index2] === ' ') {
-            // if (palabraParaEncontrar[index2] === ' ') {
                 array_mascara[index2].classList.add('espacio')
                 array_mascara[index2].textContent = ' '
                 aciertos = 1
@@ -437,6 +410,7 @@ function mostrarMascara() {
         }
     }
 }
+/** Función para mostrar todas las letras por pantalla. */
 function mostrarLetras() {
     for (let index = 0; index < arrayLetras.length; index++) {
         const span = document.createElement('span')
@@ -451,12 +425,7 @@ function mostrarLetras() {
         letrasSeleccionadas.push(span)
     }
 }
-// function mostrarPalabraEncontrada() {
-//     // let categoria = document.getElementById('categoria')
-//     // for (let index = 0; index < array_Palabras[parabraAleatoria].length; index++) {
-//         // categoria.textContent = array_Palabras[parabraAleatoria].palabra
-//     // }  
-// }
+/** Función que hace de contador. */
 function contador() {
     if (fallos < 5 && !juegoAcabado && !ganado) {
         setTimeout(() => {
@@ -470,11 +439,9 @@ function contador() {
     }    
 }
 function empezarCronometro() {
-    // if (play) {
-        setInterval(() => {
-            update()
-        }, 1000); 
-    // }
+    setInterval(() => {
+        update()
+    }, 1000); 
 }
 function mostrarImagenesError(fallos) {
     switch (fallos) {
