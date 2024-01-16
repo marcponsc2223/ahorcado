@@ -131,6 +131,7 @@ document.addEventListener("keyup", function(event) {
             imagenAcabar.src = arrayImgEnString[parseInt(localStorage.getItem('palabraAleatoria'))].img
             localStorage.clear()
             tiempo = 0
+            recargarPagina()
         }
     }
 }); 
@@ -171,6 +172,7 @@ wordContainer.addEventListener('click', event => {
         imagenAcabar.src = arrayImgEnString[parseInt(localStorage.getItem('palabraAleatoria'))].img
         localStorage.clear()
         tiempo = 0
+        recargarPagina()
     }
 });
 /** Función para llamar al contador. */
@@ -232,11 +234,13 @@ function comprovarPalabrasSeleccionadas(event) {
     }
      if (parseInt(localStorage.getItem('aciertos')) >= localStorage.getItem(localStoragePalabra).length) {
         ganado = true
-        setTimeout(() => {
-            location.reload()
-        }, 7000);
     }
     bloquearPalabras()
+}
+function recargarPagina() {
+    setTimeout(() => {
+        location.reload()
+    }, 7000);
 }
 /** Función para bloquear la letra una vez la ha pulsado en caso de que recargue la página. */
 function bloqueoAntesDeJugar(event) {
