@@ -3,7 +3,6 @@ var cartelNombreJugador = document.getElementById('nombreJugador')
 var menu = document.getElementById('divMenu')
 var game = document.getElementById('divGame')
 function displayGame() {
-    // if (!localStorage.getItem('letrasUsadas')) {
     let body = document.getElementById('body')
     let playerName = document.getElementById('name')
     menu.style.display = 'none'

@@ -11,6 +11,7 @@ let ahorcado = document.getElementById('hangman')
 let mensajeAcabar = document.getElementById('mensajeAlAcabar')
 let imagenAcabar = document.getElementById('imgAcabar')
 let categoria = document.getElementById('categoria')
+let letraClickada_pulsada = 0
 
 let arrayLetras = definirArrayLetras()
 let invalidarLetra
@@ -153,6 +154,7 @@ function empezarJuego() {
             localStorage.setItem('letrasUsadas', letrasUsadas)
             arrayStringsLocalStorage = localStorage.getItem('letrasUsadas').split('')
             comprovarPalabrasSeleccionadas(event)
+            letraClickada_pulsada = event.target.textContent
         }
     }
     if (fallos === 5 || juegoAcabado || ganado) {
@@ -259,17 +261,31 @@ function bloqueoAntesDeJugar(event) {
 }
 /** Función para bloquear la letra una vez la ha pulsado. */
 function bloquearPalabras() {
-    for (let index = 0; index < arrayStringsLocalStorage.length; index++) {
-        let letras = document.getElementById(arrayStringsLocalStorage[index].toLowerCase())
-        let blancoTransparente = 'rgba(255, 255, 255, 0.638)'
-        letras.style.transition = '0.8s'
-        letras.style.backgroundColor = blancoTransparente
-        letras.style.pointerEvents = 'none'
-        letras.style.transform = 'rotateY(180deg)'   
-    } 
+    // for (let index = 0; index < arrayStringsLocalStorage.length; index++) {
+    //     let letras = document.getElementById(arrayStringsLocalStorage[index].toLowerCase())
+    //     let blancoTransparente = 'rgba(255, 255, 255, 0.638)'
+    //     letras.style.transition = '0.8s'
+    //     letras.style.backgroundColor = blancoTransparente
+    //     letras.style.pointerEvents = 'none'
+    //     letras.style.transform = 'rotateY(180deg)'   
+    // } 
+    let letras = document.getElementById(letraClickada_pulsada.toLowerCase())
+    let blancoTransparente = 'rgba(255, 255, 255, 0.638)'
+    letras.style.transition = '0.8s'
+    letras.style.backgroundColor = blancoTransparente
+    letras.style.pointerEvents = 'none'
+    letras.style.transform = 'rotateY(180deg)'   
+    
 }
 function definirArrayLetras() {
     return ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'ñ', 'z', 'x', 'c', 'v', 'b', 'n', 'm']
+}
+function hola() {
+    return[
+        {categoria: 'hola',
+        palabra: 'adios',
+        exp: 'pepe'}
+    ]
 }
 function definirPalabrasNaturaleza() {
    return [
