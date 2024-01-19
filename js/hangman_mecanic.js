@@ -269,6 +269,7 @@ function bloquearPalabras() {
     //     letras.style.pointerEvents = 'none'
     //     letras.style.transform = 'rotateY(180deg)'   
     // } 
+    // CANVIO AQUI
     let letras = document.getElementById(letraClickada_pulsada.toLowerCase())
     let blancoTransparente = 'rgba(255, 255, 255, 0.638)'
     letras.style.transition = '0.8s'
