@@ -107,6 +107,7 @@ function empezarJuego() {
                 if (localStorage.getItem('letrasUsadas')) {
                     letrasUsadas = localStorage.getItem('letrasUsadas')
                 }
+                letraClickada_pulsada = event.key
                 letrasDelPrincipio = false
                 letrasUsadas += event.key
                 localStorage.setItem('letrasUsadas', letrasUsadas)
@@ -150,11 +151,11 @@ function empezarJuego() {
                 letrasUsadas = localStorage.getItem('letrasUsadas')
             }
             letrasDelPrincipio = false
+            letraClickada_pulsada = event.target.textContent
             letrasUsadas += event.target.textContent
             localStorage.setItem('letrasUsadas', letrasUsadas)
             arrayStringsLocalStorage = localStorage.getItem('letrasUsadas').split('')
             comprovarPalabrasSeleccionadas(event)
-            letraClickada_pulsada = event.target.textContent
         }
     }
     if (fallos === 5 || juegoAcabado || ganado) {
@@ -261,21 +262,16 @@ function bloqueoAntesDeJugar(event) {
 }
 /** Función para bloquear la letra una vez la ha pulsado. */
 function bloquearPalabras() {
-    // for (let index = 0; index < arrayStringsLocalStorage.length; index++) {
-    //     let letras = document.getElementById(arrayStringsLocalStorage[index].toLowerCase())
-    //     let blancoTransparente = 'rgba(255, 255, 255, 0.638)'
-    //     letras.style.transition = '0.8s'
-    //     letras.style.backgroundColor = blancoTransparente
-    //     letras.style.pointerEvents = 'none'
-    //     letras.style.transform = 'rotateY(180deg)'   
-    // } 
     // CANVIO AQUI
-    let letras = document.getElementById(letraClickada_pulsada.toLowerCase())
-    let blancoTransparente = 'rgba(255, 255, 255, 0.638)'
-    letras.style.transition = '0.8s'
-    letras.style.backgroundColor = blancoTransparente
-    letras.style.pointerEvents = 'none'
-    letras.style.transform = 'rotateY(180deg)'   
+    for (let index = 0; index < arrayStringsLocalStorage.length; index++) {
+        // letraClickada_pulsada
+        let letras = document.getElementById(arrayStringsLocalStorage[index].toLowerCase())
+        let blancoTransparente = 'rgba(255, 255, 255, 0.638)'
+        letras.style.transition = '0.8s'
+        letras.style.backgroundColor = blancoTransparente
+        letras.style.pointerEvents = 'none'
+        letras.style.transform = 'rotateY(180deg)'   
+    }
     
 }
 function definirArrayLetras() {
@@ -283,9 +279,44 @@ function definirArrayLetras() {
 }
 function hola() {
     return[
-        {categoria: 'hola',
-        palabra: 'adios',
-        exp: 'pepe'}
+        {
+            "palabrasNaturaleza": [
+              { "palabra": "arbol" },
+              { "palabra": "rio" },
+              { "palabra": "montaña" },
+              { "palabra": "flores" },
+              { "palabra": "cielo" },
+              { "palabra": "bosque" },
+              { "palabra": "mariposa" },
+              { "palabra": "amanecer" },
+              { "palabra": "cascada" },
+              { "palabra": "pradera" }
+            ],
+            "explicacionesNaturaleza": [
+              { "exp": "Planta de tallo leñoso que se ramifica a cierta altura del suelo." },
+              { "exp": "Corriente de agua que fluye con continuidad por un cauce." },
+              { "exp": "Una montaña es una figura topográfica del relieve terrestre positiva, una eminencia natural que se caracteriza por su altitud y, más generalmente, por su altura relativa, o incluso por su volumen, pendiente, espaciado o continuidad." },
+              { "exp": "La flor es la estructura reproductiva característica de las plantas llamadas espermatofitas o fanerógamas." },
+              { "exp": "Cielo se define a menudo como el espacio en el que se mueven los astros y que por efecto visual parece rodear la Tierra." },
+              { "exp": "Un ecosistema donde la vegetación predominante la constituyen los árboles y arbustos." },
+              { "exp": "Los lepidópteros son un orden de insectos holometábolos, casi siempre voladores, conocidos comúnmente como mariposas." },
+              { "exp": "Respecto a un observador, un astro está en el orto cuando atraviesa el plano del horizonte y entra en el campo visual del observador." },
+              { "exp": "Se llama cascada al tramo de un curso fluvial donde el agua cae verticalmente por efecto de la gravedad." },
+              { "exp": "Los pastizales y matorrales templados o dicho de otro modo, las praderas y estepas, conforman un bioma cuyos ecosistemas predominantes lo constituyen los herbazales de clima templado entre semiárido y húmedo, con una estación cálida y otra marcadamente fría en invierno." }
+            ],
+            "imgNaturaleza": [
+              { "img": "../img/arbol.png" },
+              { "img": "../img/rio.jpg" },
+              { "img": "../img/montana.png" },
+              { "img": "../img/flores.png" },
+              { "img": "../img/cielo.jpg" },
+              { "img": "../img/bosque.jpg" },
+              { "img": "../img/mariposa.png" },
+              { "img": "../img/amanecer.png" },
+              { "img": "../img/cascada.png" },
+              { "img": "../img/pradera.png" }
+            ]
+          }
     ]
 }
 function definirPalabrasNaturaleza() {
