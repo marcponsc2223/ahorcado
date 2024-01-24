@@ -44,25 +44,32 @@ if (!localStorage.getItem(localStorageJugando)) {
     let categoriaAleatoria = Math.floor(Math.random() * 3)
     if (categoriaAleatoria === 0) {
         categoria.textContent = 'Cat: Naturaleza'
-        array_Palabras = definirPalabrasNaturaleza()
-        array_Explicacion = definirExplicacionNaturaleza()
-        array_Imgs = imgNaturaleza()
+        // Seleccionamos el primer elemento del array y hacemos un mapa del contenido.
+        array_Palabras = categories()[0].palabrasNaturaleza.map(item => item.palabra)
+        array_Explicacion = categories()[0].explicacionesNaturaleza.map(item => item.exp)
+        array_Imgs = categories()[0].imgNaturaleza.map(item => item.img)
+
         localStorage.setItem(localStorageCategoria, 'naturaleza')
     } else if (categoriaAleatoria === 1) {
         categoria.textContent = 'Cat: Tecnologia'
-        array_Palabras = definirPalabrasTecnologia()
-        array_Explicacion = definirExplicacionTecnologia()
-        array_Imgs = imgTecnologia()    
+
+        array_Palabras = categories()[0].palabrasTecnologia.map(item => item.palabra)
+        array_Explicacion = categories()[0].explicacionesTecnologia.map(item => item.exp)
+        array_Imgs = categories()[0].imgTecnologia.map(item => item.img) 
+
         localStorage.setItem(localStorageCategoria, 'tecnologia')
     } else {
         categoria.textContent = 'Cat: Musica'
-        array_Palabras = definirPalabrasMusica()
-        array_Explicacion = definirExplicacionMusica()
-        array_Imgs = imgMusica() 
+
+        array_Palabras = categories()[0].palabrasMusica.map(item => item.palabra)
+        array_Explicacion = categories()[0].explicacionesMusica.map(item => item.exp)
+        array_Imgs = categories()[0].imgMusica.map(item => item.img)
+
         localStorage.setItem(localStorageCategoria, 'musica') 
     }
     parabraAleatoria = Math.floor(Math.random() * array_Palabras.length);
-    palabraParaEncontrar = array_Palabras[parabraAleatoria].palabra
+    // palabraParaEncontrar = array_Palabras[parabraAleatoria].palabra
+    palabraParaEncontrar = array_Palabras[parabraAleatoria]
     localStorage.setItem(localStoragePalabra, palabraParaEncontrar)
     // SESIONES LOCALES DE LOS ARRAYS
     let stringArrayPalabras = JSON.stringify(array_Palabras)
@@ -133,9 +140,9 @@ function empezarJuego() {
             stringArrayImg = localStorage.getItem('arrayImg')
             arrayImgEnString = JSON.parse(stringArrayImg)
     
-            mensajeAcabar.textContent = fraseAlAcabar + ' la palabra era: "' + arrayEnString[parseInt(localStorage.getItem('palabraAleatoria'))].palabra + '". ' + arrayExpEnString[parseInt(localStorage.getItem('palabraAleatoria'))].exp
+            mensajeAcabar.textContent = fraseAlAcabar + ' la palabra era: "' + arrayEnString[parseInt(localStorage.getItem('palabraAleatoria'))] + '". ' + arrayExpEnString[parseInt(localStorage.getItem('palabraAleatoria'))]
             imagenAcabar.style.display = 'inline'
-            imagenAcabar.src = arrayImgEnString[parseInt(localStorage.getItem('palabraAleatoria'))].img
+            imagenAcabar.src = arrayImgEnString[parseInt(localStorage.getItem('palabraAleatoria'))]
             localStorage.clear()
             tiempo = 0
             recargarPagina()
@@ -175,9 +182,9 @@ function empezarJuego() {
         stringArrayImg = localStorage.getItem('arrayImg')
         arrayImgEnString = JSON.parse(stringArrayImg)
     
-        mensajeAcabar.textContent = fraseAlAcabar + ' la palabra era: "' + arrayEnString[parseInt(localStorage.getItem('palabraAleatoria'))].palabra + '". ' + arrayExpEnString[parseInt(localStorage.getItem('palabraAleatoria'))].exp
+        mensajeAcabar.textContent = fraseAlAcabar + ' la palabra era: "' + arrayEnString[parseInt(localStorage.getItem('palabraAleatoria'))] + '". ' + arrayExpEnString[parseInt(localStorage.getItem('palabraAleatoria'))]
         imagenAcabar.style.display = 'inline'
-        imagenAcabar.src = arrayImgEnString[parseInt(localStorage.getItem('palabraAleatoria'))].img
+        imagenAcabar.src = arrayImgEnString[parseInt(localStorage.getItem('palabraAleatoria'))]
         localStorage.clear()
         tiempo = 0
         recargarPagina()
@@ -277,7 +284,7 @@ function bloquearPalabras() {
 function definirArrayLetras() {
     return ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'ñ', 'z', 'x', 'c', 'v', 'b', 'n', 'm']
 }
-function hola() {
+function categories() {
     return[
         {
             "palabrasNaturaleza": [
@@ -315,141 +322,87 @@ function hola() {
               { "img": "../img/amanecer.png" },
               { "img": "../img/cascada.png" },
               { "img": "../img/pradera.png" }
+            ],
+            "palabrasTecnologia" : [
+                { "palabra": "algortimo" },
+                { "palabra": "inteligencia artificial" },
+                { "palabra": 'criptomoneda' },
+                { "palabra": 'realidad aumentada' },
+                { "palabra": 'ciberseguridad' },
+                { "palabra": 'big data' },
+                { "palabra": 'nube' },
+                { "palabra": 'redes neuronales' },
+                { "palabra": 'programacion' },
+                { "palabra": 'iot' }
+            ],
+            "explicacionesTecnologia" : [
+                {"exp": "Es un conjunto de instrucciones o reglas definidas y no-ambiguas, ordenadas y finitas que permite, típicamente, solucionar un problema, realizar un cómputo, procesar datos y llevar a cabo otras tareas o actividades." },
+                {"exp": "La inteligencia artificial, en el contexto de las ciencias de la computación, es una disciplina y un conjunto de capacidades cognoscitivas e intelectuales expresadas por sistemas informáticos." },
+                {"exp": 'Una criptomoneda es un medio digital de intercambio que utiliza criptografía fuerte para asegurar las transacciones, controlar la creación de unidades adicionales y verificar la transferencia de activos usando tecnologías de registro distribuido.' },
+                {"exp": 'La realidad aumentada es el término que se usa para describir al conjunto de tecnologías que permiten que un usuario visualice parte del mundo real a través de un dispositivo tecnológico con información gráfica añadida por este.' },
+                {"exp": 'Es el área relacionada con la informática y la telemática que se enfoca en la protección de la infraestructura computacional.' },
+                {"exp": 'Los macrodatos, también llamados datos masivos, inteligencia de datos, datos a gran escala es un término que hace referencia a conjuntos de datos tan grandes y complejos que precisan de aplicaciones informáticas no tradicionales de procesamiento de datos para tratarlos adecuadamente.' },
+                {"exp": 'La nube es el uso de una red de servidores remotos conectados a internet para almacenar, administrar y procesar datos, servidores, bases de datos, redes y software.' },
+                {"exp": 'Las redes neuronales artificiales son un modelo computacional evolucionado a partir de diversas aportaciones científicas que están registradas en la historia.' },
+                {"exp": 'La programación es el proceso de crear un conjunto de instrucciones que le dicen a una computadora como realizar algún tipo de tarea.' },
+                {"exp": 'El Internet de las cosas describe objetos físicos con sensores, capacidad de procesamiento, software y otras que se conectan e intercambian datos con otros dispositivos y sistemas a través de internet u otras redes de comunicación.' }
+            ], 
+            "imgTecnologia" : [
+                {"img": "../img/algoritmo.png"}, 
+                {"img": "../img/ia.png"},
+                {"img": "../img/criptomoneda.jpg"},
+                {"img": "../img/realidad_aumentada.png"},
+                {"img": "../img/ciberseguridad.png"},
+                {"img": "../img/big_data.jpg"},
+                {"img": "../img/nube.png"},
+                {"img": "../img/redes_neuronales.png"},
+                {"img": "../img/programacion.png"},
+                {"img": "../img/iot.png"}
+            ], 
+            "palabrasMusica" : [
+                { "palabra": 'melodia' },
+                { "palabra": 'armonia' },
+                { "palabra": 'ritmo' },
+                { "palabra": 'partitura' },
+                { "palabra": 'acorde' },
+                { "palabra": 'instrumento' },
+                { "palabra": 'nota' },
+                { "palabra": 'sonata' },
+                { "palabra": 'concierto' },
+                { "palabra": 'sinfonia' }
+            ], 
+            "explicacionesMusica" : [
+                { "exp": 'Una melodía es una sucesión de sonidos que es percibida como una sola entidad. ' },
+                { "exp": 'La armonía o harmonía es el estudio de la técnica para enlazar acordes, también engloba conceptos como ritmo armónico.' },
+                { "exp": 'El ritmo, como un recurso fundamental en la visualidad, puede definirse generalmente como un «movimiento marcado por la sucesión regular de elementos débiles y fuertes, o bien de condiciones opuestas o diferentes».' },
+                { "exp": 'Una partitura es un documento manuscrito o impreso que representa e indica cómo debe interpretarse una composición musical, mediante un lenguaje propio formado por signos musicales y el llamado sistema de notación.' },
+                { "exp": 'En música y teoría musical, un acorde consiste en un conjunto de dos o más notas diferentes y que constituyen una unidad armónica.' },
+                { "exp": 'Un instrumento musical es un sistema compuesto por la combinación de uno o más sistemas resonantes y medios para su vibración, construido con el fin de producir sonido en uno o más tonos que puedan ser combinados por un intérprete para producir música.' },
+                { "exp": 'Las notas musicales se utilizan en la notación musical para representar la altura y la duración relativa de un sonido, se suele emplear la acepción «figura musical».' },
+                { "exp": 'El término sonata es el nombre dado a distintas formas musicales, empleadas desde el período barroco hasta las experiencias más futurísticas de la música contemporánea.' },
+                { "exp": 'Un concierto es una expresión cultural musical en la «que se ejecutan composiciones sueltas».' },
+                { "exp": 'Una sinfonía es un tipo de composición musical extendida en la música clásica occidental y compuesta la mayoría de las veces para orquesta. Generalmente, está dividida en cuatro movimientos, cada uno con un momento y estructura diferente.' }
+            ], 
+            "imgMusica" : [
+                {"img": "../img/melodia.png"}, 
+                {"img": "../img/armonia.png"},
+                {"img": "../img/ritmo.png"},
+                {"img": "../img/partitura.png"},
+                {"img": "../img/acorde.png"},
+                {"img": "../img/instrumento.png"},
+                {"img": "../img/nota.png"},
+                {"img": "../img/sonata.png"},
+                {"img": "../img/concierto.jpg"},
+                {"img": "../img/sinfonia.jpg"}
             ]
           }
     ]
 }
-function definirPalabrasNaturaleza() {
-   return [
-        { palabra: "arbol" },
-        { palabra: "rio" },
-        { palabra: 'montaña' },
-        { palabra: 'flores' },
-        { palabra: 'cielo' },
-        { palabra: 'bosque' },
-        { palabra: 'mariposa' },
-        { palabra: 'amanecer' },
-        { palabra: 'cascada' },
-        { palabra: 'pradera' },
-    ]
-}
-function definirExplicacionNaturaleza() {
-    return [
-        {exp: "Planta de tallo leñoso que se ramifica a cierta altura del suelo." },
-        {exp: "Corriente de agua que fluye con continuidad por un cauce." },
-        {exp: 'Una montaña es una figura topográfica del relieve terrestre positiva, una eminencia natural que se caracteriza por su altitud y, más generalmente, por su altura relativa, o incluso por su volumen, pendiente, espaciado o continuidad.' },
-        {exp: 'La flor es la estructura reproductiva característica de las plantas llamadas espermatofitas o fanerógamas.' },
-        {exp: 'Cielo se define a menudo como el espacio en el que se mueven los astros y que por efecto visual parece rodear la Tierra.' },
-        {exp: 'Un ecosistema donde la vegetación predominante la constituyen los árboles y arbustos.' },
-        {exp: 'Los lepidópteros son un orden de insectos holometábolos, casi siempre voladores, conocidos comúnmente como mariposas.' },
-        {exp: 'Respecto a un observador, un astro está en el orto cuando atraviesa el plano del horizonte y entra en el campo visual del observador.' },
-        {exp: 'Se llama cascada al tramo de un curso fluvial donde el agua cae verticalmente por efecto de la gravedad.' },
-        {exp: 'Los pastizales y matorrales templados o dicho de otro modo, las praderas y estepas, conforman un bioma cuyos ecosistemas predominantes lo constituyen los herbazales de clima templado entre semiárido y húmedo, con una estación cálida y otra marcadamente fría en invierno.' },
-    ]
-}
-function imgNaturaleza() {{ 
-    return [
-        {img: "../img/arbol.png"}, 
-        {img: "../img/rio.jpg"},
-        {img: "../img/montana.png"},
-        {img: "../img/flores.png"},
-        {img: "../img/cielo.jpg"},
-        {img: "../img/bosque.jpg"},
-        {img: "../img/mariposa.png"},
-        {img: "../img/amanecer.png"},
-        {img: "../img/cascada.png"},
-        {img: "../img/pradera.png"},
-    ]
-}}
-function definirPalabrasTecnologia() {  
-    return [
-         { palabra: "algortimo" },
-         { palabra: "inteligencia artificial" },
-         { palabra: 'criptomoneda' },
-         { palabra: 'realidad aumentada' },
-         { palabra: 'ciberseguridad' },
-         { palabra: 'big data' },
-         { palabra: 'nube' },
-         { palabra: 'redes neuronales' },
-         { palabra: 'programacion' },
-         { palabra: 'iot' },
-     ]
-}
-function definirExplicacionTecnologia() {
-    return [
-        {exp: "Es un conjunto de instrucciones o reglas definidas y no-ambiguas, ordenadas y finitas que permite, típicamente, solucionar un problema, realizar un cómputo, procesar datos y llevar a cabo otras tareas o actividades." },
-        {exp: "La inteligencia artificial, en el contexto de las ciencias de la computación, es una disciplina y un conjunto de capacidades cognoscitivas e intelectuales expresadas por sistemas informáticos." },
-        {exp: 'Una criptomoneda es un medio digital de intercambio que utiliza criptografía fuerte para asegurar las transacciones, controlar la creación de unidades adicionales y verificar la transferencia de activos usando tecnologías de registro distribuido.' },
-        {exp: 'La realidad aumentada es el término que se usa para describir al conjunto de tecnologías que permiten que un usuario visualice parte del mundo real a través de un dispositivo tecnológico con información gráfica añadida por este.' },
-        {exp: 'Es el área relacionada con la informática y la telemática que se enfoca en la protección de la infraestructura computacional.' },
-        {exp: 'Los macrodatos, también llamados datos masivos, inteligencia de datos, datos a gran escala es un término que hace referencia a conjuntos de datos tan grandes y complejos que precisan de aplicaciones informáticas no tradicionales de procesamiento de datos para tratarlos adecuadamente.' },
-        {exp: 'La nube es el uso de una red de servidores remotos conectados a internet para almacenar, administrar y procesar datos, servidores, bases de datos, redes y software.' },
-        {exp: 'Las redes neuronales artificiales son un modelo computacional evolucionado a partir de diversas aportaciones científicas que están registradas en la historia.' },
-        {exp: 'La programación es el proceso de crear un conjunto de instrucciones que le dicen a una computadora como realizar algún tipo de tarea.' },
-        {exp: 'El Internet de las cosas describe objetos físicos con sensores, capacidad de procesamiento, software y otras que se conectan e intercambian datos con otros dispositivos y sistemas a través de internet u otras redes de comunicación.' },
-    ]
-}
-function imgTecnologia() {{ 
-    return [
-        {img: "../img/algoritmo.png"}, 
-        {img: "../img/ia.png"},
-        {img: "../img/criptomoneda.jpg"},
-        {img: "../img/realidad_aumentada.png"},
-        {img: "../img/ciberseguridad.png"},
-        {img: "../img/big_data.jpg"},
-        {img: "../img/nube.png"},
-        {img: "../img/redes_neuronales.png"},
-        {img: "../img/programacion.png"},
-        {img: "../img/iot.png"},
-    ]
-}}
-function definirPalabrasMusica() {
-    return [
-         { palabra: 'melodia' },
-         { palabra: 'armonia' },
-         { palabra: 'ritmo' },
-         { palabra: 'partitura' },
-         { palabra: 'acorde' },
-         { palabra: 'instrumento' },
-         { palabra: 'nota' },
-         { palabra: 'sonata' },
-         { palabra: 'concierto' },
-         { palabra: 'sinfonia' },
-     ]
-}
-function definirExplicacionMusica() {
-    return [
-         { exp: 'Una melodía es una sucesión de sonidos que es percibida como una sola entidad. ' },
-         { exp: 'La armonía o harmonía es el estudio de la técnica para enlazar acordes, también engloba conceptos como ritmo armónico.' },
-         { exp: 'El ritmo, como un recurso fundamental en la visualidad, puede definirse generalmente como un «movimiento marcado por la sucesión regular de elementos débiles y fuertes, o bien de condiciones opuestas o diferentes».' },
-         { exp: 'Una partitura es un documento manuscrito o impreso que representa e indica cómo debe interpretarse una composición musical, mediante un lenguaje propio formado por signos musicales y el llamado sistema de notación.' },
-         { exp: 'En música y teoría musical, un acorde consiste en un conjunto de dos o más notas diferentes y que constituyen una unidad armónica.' },
-         { exp: 'Un instrumento musical es un sistema compuesto por la combinación de uno o más sistemas resonantes y medios para su vibración, construido con el fin de producir sonido en uno o más tonos que puedan ser combinados por un intérprete para producir música.' },
-         { exp: 'Las notas musicales se utilizan en la notación musical para representar la altura y la duración relativa de un sonido, se suele emplear la acepción «figura musical».' },
-         { exp: 'El término sonata es el nombre dado a distintas formas musicales, empleadas desde el período barroco hasta las experiencias más futurísticas de la música contemporánea.' },
-         { exp: 'Un concierto es una expresión cultural musical en la «que se ejecutan composiciones sueltas».' },
-         { exp: 'Una sinfonía es un tipo de composición musical extendida en la música clásica occidental y compuesta la mayoría de las veces para orquesta. Generalmente, está dividida en cuatro movimientos, cada uno con un momento y estructura diferente.' },
-     ]
-}
-function imgMusica() {{ 
-    return [
-        {img: "../img/melodia.png"}, 
-        {img: "../img/armonia.png"},
-        {img: "../img/ritmo.png"},
-        {img: "../img/partitura.png"},
-        {img: "../img/acorde.png"},
-        {img: "../img/instrumento.png"},
-        {img: "../img/nota.png"},
-        {img: "../img/sonata.png"},
-        {img: "../img/concierto.jpg"},
-        {img: "../img/sinfonia.jpg"},
-    ]
-}}
 /** Función para mostrar la máscara de letras de la palabra en guíones. */
 function mostrarMascara() {
     let stringArray = localStorage.getItem('arrayPalabras')
     let arrayEnString = JSON.parse(stringArray)
-    for (let index = 0; index < arrayEnString[parseInt(localStorage.getItem('palabraAleatoria'))].palabra.length; index++) {
+    for (let index = 0; index < arrayEnString[parseInt(localStorage.getItem('palabraAleatoria'))].length; index++) {
         const mascara = document.createElement('span')
         document.querySelector('#palabraAdivinar').appendChild(mascara)
         mascara.classList.add('showMask')
